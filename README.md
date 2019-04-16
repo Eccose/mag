@@ -1,1 +1,1 @@
-# mag
+System pozycjonowania panelu fotowoltaicznego

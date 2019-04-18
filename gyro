@@ -1,0 +1,81 @@
+import smbus
+
+bus= smbus.SMBus(1)
+
+DEV = 0x6b
+
+#rejestry
+acc_init = 0x10             #CTRL1_XL
+gyro_init = 0x11            #CTRL2_G
+
+acc_mode = 0x15             #CTRL6_C
+gyro_mode = 0x16            #CTRL7_G
+
+acc_start = 0x18            #CTRL9_XL
+gyro_start = 0x19           #CTRL10_C
+
+INT_acc = 0x0d              #INT1_CTRL
+INT_gyro = 0x0e             #INT2_CTRL
+
+status_reg = 0x1e           #status_reg
+
+OUTX_L_G = 0x22
+OUTX_H_G = 0x23
+OUTY_L_G = 0x24
+OUTY_H_G = 0x25
+OUTZ_L_G = 0x26
+OUTZ_H_G = 0x27
+
+OUTX_L_XL = 0x28
+OUTX_H_XL = 0x29
+OUTY_L_XL = 0x2a
+OUTY_H_XL = 0x2b
+OUTZ_L_XL = 0x2c
+OUTZ_H_XL = 0x2d
+
+
+#wartości rejestrów
+acc_high_perf = 0x60
+gyro_high_perf = 0x60
+
+acc_start_val = 0x38
+gyro_start_val = 0x38
+
+INT_acc_val = 0x01
+INT_gyro_val = 0x02
+
+
+bus.write_byte_data(DEV, acc_start, acc_start_val)
+bus.write_byte_data(DEV, gyro_start, gyro_start_val)
+
+bus.write_byte_data(DEV, acc_mode, acc_high_perf)
+bus.write_byte_data(DEV, gyro_mode, gyro_high_perf)
+
+bus.write_byte_data(DEV, INT_acc, INT_acc_val)
+bus.write_byte_data(DEV, INT_gyro, INT_gyro_val)
+
+
+
+while true:
+  status = bus.read_byte(DEV,status_reg)
+  if status == 0x03:
+      g_x_l = bus.read_byte(DEV,OUTX_L_G)
+      g_x_h = bus.read_byte(DEV,OUTX_H_G)
+      g_y_l = bus.read_byte(DEV,OUTY_L_G)
+      g_y_h = bus.read_byte(DEV,OUTY_H_G)
+      g_z_l = bus.read_byte(DEV,OUTZ_L_G)
+      g_z_h = bus.read_byte(DEV,OUTZ_H_G)
+      acc_x_l = bus.read_byte(DEV,OUTX_L_XL)
+      acc_x_h = bus.read_byte(DEV,OUTX_H_XL)
+      acc_y_l = bus.read_byte(DEV,OUTY_L_XL)
+      acc_y_h = bus.read_byte(DEV,OUTY_H_XL)
+      acc_z_l = bus.read_byte(DEV,OUTZ_L_XL)
+      acc_z_h = bus.read_byte(DEV,OUTZ_H_XL)
+      
+      print ('acc_z_h= ', acc_z_h)
+
+
+
+
+
+
